@@ -38,8 +38,6 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
  exit 0
 fi
 rsync "${RSYNC_BASE[@]}" "$LOCAL_DIR" "${REMOTE}:${REMOTE_DIR}/"
-DEVOPS · ПРАКТИЧЕСКАЯ РАБОТА № 6
-Пошаговая инструкция · 11
 if ! curl --fail --silent --show-error --cacert "$CA_CERT" "$SITE_URL" >/dev/null; then
  echo "Ошибка: после доставки сайт недоступен или проверка TLS не пройдена." >&2
  exit 1

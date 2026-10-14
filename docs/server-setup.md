@@ -64,3 +64,15 @@
 - 02-keys-configured - создан пользователь devops и настроена ключевая аутентификация.
 - 03-ssh-hardened - усилена защита SSH.
 
+## 8. Веб-сервер
+- Пакет: nginx; установка: `sudo apt install -y nginx`.
+- Конфигурация ресурса: `/etc/nginx/sites-available/devops-site`.
+- Активная ссылка: `/etc/nginx/sites-enabled/devops-site`.
+- Каталог ресурса: `/var/www/devops-site`; владелец `devops:devops`.
+- Права: каталоги `755`, файлы `644`.
+- Сертификат: `/etc/ssl/certs/devops.crt`, владелец `root:root`, права `644`.
+- Закрытый ключ: `/etc/ssl/private/devops.key`, владелец `root:root`, права `600`.
+- Формирование сертификата:
+ `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/devops.key -out /etc/ssl/certs/devops.crt
+-subj "/CN=devops.local" -addext "subjectAltName=DNS:devops.local"`.
+- Срок действия: 365 дней с момента формирования

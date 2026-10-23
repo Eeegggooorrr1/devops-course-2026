@@ -64,3 +64,18 @@
 - 02-keys-configured - создан пользователь devops и настроена ключевая аутентификация.
 - 03-ssh-hardened - усилена защита SSH.
 
+
+## 9. Контейнеризация
+
+- Docker Engine установлен из официального apt-репозитория Docker; версия: 29.9.2.
+- Плагин Docker Compose: Docker Compose version v5.6.1.
+- Учётная запись, входящая в группу docker: devops.
+- Каталог проекта на сервере: /home/devops/app.
+- Файл переменных окружения: /home/devops/app/.env; владелец devops, права 600. Значения секретов в документацию не включаются.
+- Файл конфигурации: /home/devops/app/docker-compose.yml.
+- Образ приложения: devops-app:1.0; приложение работает от непривилегированного пользователя app.
+- Порт приложения опубликован как 127.0.0.1:5000 -> порт контейнера 5000.
+- Порт PostgreSQL 5432 на хосте не опубликован; доступ к СУБД осуществляется через внутреннюю сеть Compose по имени db.
+- Именованный том базы данных: app_db_data, точка монтирования в контейнере СУБД: /var/lib/postgresql/data.
+- Сеть Compose: backend (имя Docker обычно содержит префикс проекта).
+- Конфигурация Nginx: /etc/nginx/sites-available/devops-site; HTTPS location /app/ проксирует запросы на http://127.0.0.1:5000/ и передаёт заголовки Host, X-Real-IP, X-Forwarded-For и X-Forwarded-Proto.

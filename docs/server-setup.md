@@ -64,3 +64,51 @@
 - 02-keys-configured - создан пользователь devops и настроена ключевая аутентификация.
 - 03-ssh-hardened - усилена защита SSH.
 
+
+## 10. Ansible
+
+Управляющий узел: WSL с Ubuntu.
+Управляемый узел: VM devops-vm с Ubuntu Server 24.04.
+Адрес VM в сети Host-only: 192.168.56.104.
+
+Проект автоматизации расположен в каталоге ansible/.
+
+Для первичной настройки используется inventory/bootstrap.ini
+и учётная запись student с парольным подключением.
+
+Последующие запуски используют inventory/prod.ini,
+учётную запись devops и ключ ~/.ssh/devops_vm.
+
+Назначение ролей:
+
+- base: базовые пакеты и Docker Engine;
+- ssh: SSH-доступ, пользователи, sudo и UFW;
+- nginx: обратное проксирование;
+- app: загрузка и запуск контейнера.
+
+Образ: ghcr.io/eeegggooorrr1/devops-ci-app
+SHA: a9dc43381184900c6fe1e9b5d052172e58dac488
+
+Порт приложения: 5000, доступен через 127.0.0.1.
+Внешний HTTP-порт: 80.
+Проверка работоспособности: /health.
+
+Первый запуск из каталога ansible/:
+
+```bash
+ansible-playbook -i inventory/bootstrap.ini site.yml --ask-pass --ask-become-pass
+```
+
+Повторный запуск:
+
+```bash
+ansible-playbook site.yml
+```
+
+Проверочный запуск без изменения конфигурации:
+
+```bash
+ansible-playbook verify.yml
+```
+
+Пароли и закрытые SSH-ключи в репозитории не хранятся.
